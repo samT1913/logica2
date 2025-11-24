@@ -1,0 +1,122 @@
+<!DOCTYPE html><html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mini Quiz - Ingeniería en Sistemas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f2f6ff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }.card {
+        background: #ffffff;
+        width: 90%;
+        max-width: 420px;
+        padding: 25px;
+        border-radius: 16px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        text-align: center;
+    }
+
+    h1 {
+        font-size: 24px;
+        margin-bottom: 20px;
+        color: #2a4d8f;
+    }
+
+    .question {
+        font-size: 18px;
+        margin-bottom: 20px;
+        font-weight: bold;
+    }
+
+    button {
+        width: 100%;
+        margin: 8px 0;
+        padding: 12px;
+        font-size: 16px;
+        background: #e8efff;
+        border: 2px solid #b7c8ff;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    button:hover {
+        background: #dbe7ff;
+    }
+
+    #result {
+        margin-top: 20px;
+        font-size: 18px;
+        font-weight: bold;
+        color: #2a4d8f;
+    }
+</style>
+
+</head>
+<body>
+    <div class="card">
+        <h1>Mini Quiz de Lógica</h1>
+        <div id="quiz"></div>
+        <div id="result"></div>
+    </div><script>
+    const quizData = [
+        {
+            question: "Si un sistema tiene 4 módulos y cada módulo tiene 2 funciones, ¿cuántas funciones hay en total?",
+            answers: ["4", "6", "8"],
+            correct: 2
+        },
+        {
+            question: "Si un algoritmo tarda 2 segundos en ejecutarse y lo optimizamos al doble de velocidad, ahora tarda:",
+            answers: ["1 segundo", "3 segundos", "0.5 segundos"],
+            correct: 0
+        },
+        {
+            question: "En binario, ¿cuánto es 10 + 1?",
+            answers: ["11", "101", "100"],
+            correct: 1
+        }
+    ];
+
+    let index = 0;
+    let score = 0;
+    const quiz = document.getElementById("quiz");
+    const result = document.getElementById("result");
+
+    function loadQuestion() {
+        if (index >= quizData.length) {
+            quiz.innerHTML = "";
+            result.innerHTML = Puntaje final: ${score} / ${quizData.length};
+            return;
+        }
+
+        let q = quizData[index];
+        quiz.innerHTML = `
+            <div class='question'>${q.question}</div>
+            ${q.answers
+                .map(
+                    (ans, i) => <button onclick='checkAnswer(${i})'>${ans}</button>
+                )
+                .join("")}
+        `;
+    }
+
+    function checkAnswer(i) {
+        if (i === quizData[index].correct) {
+            score++;
+        }
+        index++;
+        loadQuestion();
+    }
+
+    loadQuestion();
+</script>
+
+</body>
+</html>
