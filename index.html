@@ -1,122 +1,128 @@
 <!DOCTYPE html><html lang="es">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Mini Quiz - Ingeniería en Sistemas</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f2f6ff;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }.card {
-        background: #ffffff;
-        width: 90%;
-        max-width: 420px;
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Mini‑Quiz Ingeniería en Sistemas</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f5f6fa;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+    .container {
+        background: white;
         padding: 25px;
-        border-radius: 16px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        width: 90%;
+        max-width: 450px;
+        border-radius: 12px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         text-align: center;
     }
-
-    h1 {
-        font-size: 24px;
-        margin-bottom: 20px;
-        color: #2a4d8f;
+    h2 {
+        margin-bottom: 10px;
+        color: #333;
     }
-
-    .question {
-        font-size: 18px;
-        margin-bottom: 20px;
-        font-weight: bold;
-    }
-
     button {
         width: 100%;
-        margin: 8px 0;
         padding: 12px;
-        font-size: 16px;
-        background: #e8efff;
-        border: 2px solid #b7c8ff;
-        border-radius: 10px;
+        margin: 8px 0;
+        border: none;
+        background: #4a74f7;
+        color: white;
+        font-size: 15px;
+        border-radius: 8px;
         cursor: pointer;
-        transition: 0.2s;
     }
-
     button:hover {
-        background: #dbe7ff;
+        background: #3b63d6;
     }
-
-    #result {
-        margin-top: 20px;
-        font-size: 18px;
-        font-weight: bold;
-        color: #2a4d8f;
-    }
+    .hidden { display: none; }
 </style>
-
 </head>
 <body>
-    <div class="card">
-        <h1>Mini Quiz de Lógica</h1>
-        <div id="quiz"></div>
-        <div id="result"></div>
-    </div><script>
-    const quizData = [
-        {
-            question: "Si un sistema tiene 4 módulos y cada módulo tiene 2 funciones, ¿cuántas funciones hay en total?",
-            answers: ["4", "6", "8"],
-            correct: 2
-        },
-        {
-            question: "Si un algoritmo tarda 2 segundos en ejecutarse y lo optimizamos al doble de velocidad, ahora tarda:",
-            answers: ["1 segundo", "3 segundos", "0.5 segundos"],
-            correct: 0
-        },
-        {
-            question: "En binario, ¿cuánto es 10 + 1?",
-            answers: ["11", "101", "100"],
-            correct: 1
-        }
-    ];
+<div class="container">
+    <h2>Quiz de Ingeniería en Sistemas</h2>
+    <div id="quiz"></div>
+    <button id="nextBtn" class="hidden">Siguiente</button>
+    <h3 id="result" class="hidden"></h3>
+</div><script>
+const preguntas = [
+    {
+        tipo: "multiple",
+        pregunta: "¿Qué es un algoritmo?",
+        opciones: ["Un problema matemático", "Una secuencia de pasos", "Un lenguaje de programación"],
+        correcta: 1
+    },
+    {
+        tipo: "vf",
+        pregunta: "HTML es un lenguaje de programación.",
+        opciones: ["Verdadero", "Falso"],
+        correcta: 1
+    },
+    {
+        tipo: "multiple",
+        pregunta: "¿Qué significa CPU?",
+        opciones: ["Central Processing Unit", "Computer Power Utility", "Core Program Unit"],
+        correcta: 0
+    },
+    {
+        tipo: "vf",
+        pregunta: "La nube permite guardar datos en servidores remotos.",
+        opciones: ["Verdadero", "Falso"],
+        correcta: 0
+    }
+];
 
-    let index = 0;
-    let score = 0;
-    const quiz = document.getElementById("quiz");
-    const result = document.getElementById("result");
+let index = 0;
+let puntaje = 0;
 
-    function loadQuestion() {
-        if (index >= quizData.length) {
-            quiz.innerHTML = "";
-            result.innerHTML = Puntaje final: ${score} / ${quizData.length};
-            return;
-        }
+const quizDiv = document.getElementById("quiz");
+const nextBtn = document.getElementById("nextBtn");
+const result = document.getElementById("result");
 
-        let q = quizData[index];
-        quiz.innerHTML = `
-            <div class='question'>${q.question}</div>
-            ${q.answers
-                .map(
-                    (ans, i) => <button onclick='checkAnswer(${i})'>${ans}</button>
-                )
-                .join("")}
-        `;
+mostrarPregunta();
+
+function mostrarPregunta() {
+    const q = preguntas[index];
+    quizDiv.innerHTML = <h3>${q.pregunta}</h3>;
+
+    q.opciones.forEach((op, i) => {
+        quizDiv.innerHTML += <button onclick="responder(${i})">${op}</button>;
+    });
+}
+
+function responder(i) {
+    const q = preguntas[index];
+
+    if (i === q.correcta) {
+        puntaje++;
     }
 
-    function checkAnswer(i) {
-        if (i === quizData[index].correct) {
-            score++;
-        }
-        index++;
-        loadQuestion();
+    nextBtn.classList.remove("hidden");
+    const botones = quizDiv.querySelectorAll("button");
+    botones.forEach(b => b.disabled = true);
+}
+
+nextBtn.onclick = () => {
+    index++;
+    if (index < preguntas.length) {
+        nextBtn.classList.add("hidden");
+        mostrarPregunta();
+    } else {
+        mostrarResultado();
     }
+};
 
-    loadQuestion();
-</script>
-
-</body>
+function mostrarResultado() {
+    quizDiv.innerHTML = "";
+    nextBtn.classList.add("hidden");
+    result.classList.remove("hidden");
+    result.innerHTML = ¡Terminaste! Puntaje: ${puntaje} / ${preguntas.length};
+}
+</script></body>
 </html>
